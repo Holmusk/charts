@@ -99,6 +99,7 @@ export 'package:charts_common/common.dart'
         NoneRenderSpec,
         NumericAxis,
         NumericAxisSpec,
+        GlucoseNumericAxisSpec,
         NumericCartesianChart,
         NumericEndPointsTickProviderSpec,
         NumericExtents,

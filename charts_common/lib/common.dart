@@ -82,6 +82,8 @@ export 'src/chart/cartesian/axis/spec/numeric_axis_spec.dart'
         BasicNumericTickFormatterSpec,
         BasicNumericTickProviderSpec,
         StaticNumericTickProviderSpec;
+export 'src/chart/cartesian/axis/spec/numeric_axis_spec.dart'
+    show GlucoseNumericAxisSpec;
 export 'src/chart/cartesian/axis/spec/ordinal_axis_spec.dart'
     show
         BasicOrdinalTickProviderSpec,

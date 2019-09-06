@@ -105,6 +105,82 @@ class NumericAxisSpec extends AxisSpec<num> {
   }
 }
 
+/// [AxisSpec] specialized for numeric/continuous axes like the measure axis.
+@immutable
+class GlucoseNumericAxisSpec extends AxisSpec<num> {
+  /// Sets viewport for this Axis.
+  ///
+  /// If pan / zoom behaviors are set, this is the initial viewport.
+  final NumericExtents viewport;
+
+  /// Creates a [AxisSpec] that specialized for numeric data.
+  ///
+  /// [renderSpec] spec used to configure how the ticks and labels
+  ///     actually render. Possible values are [GridlineRendererSpec],
+  ///     [SmallTickRendererSpec] & [NoneRenderSpec]. Make sure that the <D>
+  ///     given to the RenderSpec is of type [num] when using this spec.
+  /// [tickProviderSpec] spec used to configure what ticks are generated.
+  /// [tickFormatterSpec] spec used to configure how the tick labels are
+  ///     formatted.
+  /// [showAxisLine] override to force the axis to draw the axis line.
+  const GlucoseNumericAxisSpec({
+    RenderSpec<num> renderSpec,
+    NumericTickProviderSpec tickProviderSpec,
+    NumericTickFormatterSpec tickFormatterSpec,
+    bool showAxisLine,
+    this.viewport,
+  }) : super(
+            renderSpec: renderSpec,
+            tickProviderSpec: tickProviderSpec,
+            tickFormatterSpec: tickFormatterSpec,
+            showAxisLine: showAxisLine);
+
+  factory GlucoseNumericAxisSpec.from(
+    NumericAxisSpec other, {
+    RenderSpec<num> renderSpec,
+    TickProviderSpec tickProviderSpec,
+    TickFormatterSpec tickFormatterSpec,
+    bool showAxisLine,
+    NumericExtents viewport,
+  }) {
+    return new GlucoseNumericAxisSpec(
+      renderSpec: renderSpec ?? other.renderSpec,
+      tickProviderSpec: tickProviderSpec ?? other.tickProviderSpec,
+      tickFormatterSpec: tickFormatterSpec ?? other.tickFormatterSpec,
+      showAxisLine: showAxisLine ?? other.showAxisLine,
+      viewport: viewport ?? other.viewport,
+    );
+  }
+
+  @override
+  configure(
+      Axis<num> axis, ChartContext context, GraphicsFactory graphicsFactory) {
+    super.configure(axis, context, graphicsFactory);
+
+    if (axis is NumericAxis && viewport != null) {
+      axis.setScaleViewport(viewport);
+    }
+    axis.autoViewport = false;
+  }
+
+  @override
+  NumericAxis createAxis() => new NumericAxis();
+
+  @override
+  bool operator ==(Object other) =>
+      other is NumericAxisSpec &&
+      viewport == other.viewport &&
+      super == (other);
+
+  @override
+  int get hashCode {
+    int hashcode = super.hashCode;
+    hashcode = (hashcode * 37) + viewport.hashCode;
+    hashcode = (hashcode * 37) + super.hashCode;
+    return hashcode;
+  }
+}
+
 abstract class NumericTickProviderSpec extends TickProviderSpec<num> {}
 
 abstract class NumericTickFormatterSpec extends TickFormatterSpec<num> {}
